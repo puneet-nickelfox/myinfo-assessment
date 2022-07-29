@@ -1,8 +1,7 @@
-import React, { Component, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import "../auth/login.css";
-import { Button, Grid, makeStyles, Paper, Typography } from "@material-ui/core";
-import InputField from "../../components/InputField";
+import { Grid, makeStyles, Typography } from "@material-ui/core";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -19,8 +18,6 @@ const useStyles = makeStyles({
   paper: {
     padding: 30,
     gridGap: 30,
-    // height: "100%",
-    // width: "100%",
   },
   toggleDiv: {
     display: "flex",
@@ -55,7 +52,6 @@ const useStyles = makeStyles({
   },
   title: {
     fontSize: "14px",
-    // fontWeight: 600,
     color: "#82889c",
     marginBottom: "10px",
   },
@@ -137,7 +133,7 @@ const IncomeInfo = ({ employeeData }) => {
                       <>
                         {index == 0 && (
                           <TableRow className={classes.cell}>
-                            {element.map((eachElement, indexing) => {
+                            {element.map((eachElement) => {
                               return (
                                 <>
                                   <TableCell
@@ -199,72 +195,71 @@ const IncomeInfo = ({ employeeData }) => {
             </div>
           </Grid>
         </Grid>
-        {employeeData?.cpfbalances &&
-        <>
-        <Typography variant="h5" className={classes.typoMarginTop}>
-          CPF Account Balance
-        </Typography>
-        <TableContainer>
-         
-          <Table className={classes.table} aria-label="simple table">
-            <TableHead>
-              <TableRow className={classes.cell}>
-                <TableCell
-                  className={` ${classes.tableCell} ${classes.tableHeading}`}
-                ></TableCell>
-                <TableCell
-                  className={`${classes.tableHeading} ${classes.tableCell}`}
-                ></TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              <TableRow className={classes.tableRow}>
-                <TableCell className={classes.tableCell}>
-                  Ordinary Account (OA) (S$)
-                </TableCell>
-                <TableCell className={classes.tableCell}>
-                  {employeeData?.cpfbalances?.oa !== ""
-                    ? employeeData?.cpfbalances?.oa
-                    : "N/A"}
-                </TableCell>
-              </TableRow>
-              <TableRow className={classes.tableRow}>
-                <TableCell className={classes.tableCell}>
-                  Special Account (SA) (S$)
-                </TableCell>
-                <TableCell className={classes.tableCell}>
-                  {employeeData?.cpfbalances?.sa !== ""
-                    ? employeeData?.cpfbalances?.sa
-                    : "N/A"}
-                </TableCell>
-              </TableRow>
-              <TableRow className={classes.tableRow}>
-                <TableCell className={classes.tableCell}>
-                  Medisave Account (MA) (S$)
-                </TableCell>
-                <TableCell className={classes.tableCell}>
-                  {employeeData?.cpfbalances?.ma !== ""
-                    ? employeeData?.cpfbalances?.ma
-                    : "N/A"}
-                </TableCell>
-              </TableRow>
-              {employeeData?.cpfbalances?.ra !== "" && (
-                <TableRow className={classes.tableRow}>
-                  <TableCell className={classes.tableCell}>
-                    Retirement Account (RA) (S$)
-                  </TableCell>
-                  <TableCell className={classes.tableCell}>
-                    {employeeData?.cpfbalances?.ra !== ""
-                      ? employeeData?.cpfbalances?.ra
-                      : "N/A"}
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        </>
-}
+        {employeeData?.cpfbalances && (
+          <>
+            <Typography variant="h5" className={classes.typoMarginTop}>
+              CPF Account Balance
+            </Typography>
+            <TableContainer>
+              <Table className={classes.table} aria-label="simple table">
+                <TableHead>
+                  <TableRow className={classes.cell}>
+                    <TableCell
+                      className={` ${classes.tableCell} ${classes.tableHeading}`}
+                    ></TableCell>
+                    <TableCell
+                      className={`${classes.tableHeading} ${classes.tableCell}`}
+                    ></TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  <TableRow className={classes.tableRow}>
+                    <TableCell className={classes.tableCell}>
+                      Ordinary Account (OA) (S$)
+                    </TableCell>
+                    <TableCell className={classes.tableCell}>
+                      {employeeData?.cpfbalances?.oa !== ""
+                        ? employeeData?.cpfbalances?.oa
+                        : "N/A"}
+                    </TableCell>
+                  </TableRow>
+                  <TableRow className={classes.tableRow}>
+                    <TableCell className={classes.tableCell}>
+                      Special Account (SA) (S$)
+                    </TableCell>
+                    <TableCell className={classes.tableCell}>
+                      {employeeData?.cpfbalances?.sa !== ""
+                        ? employeeData?.cpfbalances?.sa
+                        : "N/A"}
+                    </TableCell>
+                  </TableRow>
+                  <TableRow className={classes.tableRow}>
+                    <TableCell className={classes.tableCell}>
+                      Medisave Account (MA) (S$)
+                    </TableCell>
+                    <TableCell className={classes.tableCell}>
+                      {employeeData?.cpfbalances?.ma !== ""
+                        ? employeeData?.cpfbalances?.ma
+                        : "N/A"}
+                    </TableCell>
+                  </TableRow>
+                  {employeeData?.cpfbalances?.ra !== "" && (
+                    <TableRow className={classes.tableRow}>
+                      <TableCell className={classes.tableCell}>
+                        Retirement Account (RA) (S$)
+                      </TableCell>
+                      <TableCell className={classes.tableCell}>
+                        {employeeData?.cpfbalances?.ra !== ""
+                          ? employeeData?.cpfbalances?.ra
+                          : "N/A"}
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </>
+        )}
         {employeeData?.cpfcontributions?.history?.length > 0 && (
           <>
             <Typography className={classes.typoMarginTop} variant="h5">

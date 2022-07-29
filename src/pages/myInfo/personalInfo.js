@@ -1,8 +1,6 @@
-import React, { Component } from "react";
-import { useState } from "react";
+import React from "react";
 import "../auth/login.css";
-import { Button, Grid, makeStyles, Paper, Typography } from "@material-ui/core";
-import InputField from "../../components/InputField";
+import { Grid, makeStyles, Typography } from "@material-ui/core";
 
 const useStyles = makeStyles({
   background: {
@@ -13,8 +11,6 @@ const useStyles = makeStyles({
   paper: {
     padding: 30,
     gridGap: 30,
-    // height: "100%",
-    // width: "100%",
   },
   toggleDiv: {
     display: "flex",

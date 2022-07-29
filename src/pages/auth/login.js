@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import { useState } from "react";
 import "./login.css";
 import { Button, Grid, makeStyles, Paper, Typography } from "@material-ui/core";
@@ -30,7 +30,6 @@ const useStyles = makeStyles({
     display: "flex",
     flexDirection: "column",
   },
-  input: {},
   button: {
     background: "red",
     color: "white",
@@ -40,7 +39,6 @@ const useStyles = makeStyles({
       color: "white",
     },
   },
-  inputProps: {},
   typoGrid: {
     marginBottom: 15,
     marginTop: 10,
@@ -58,26 +56,12 @@ const useStyles = makeStyles({
 
 const Login = () => {
   const classes = useStyles();
-  const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
   const [errorEmail, setErrorEmail] = useState(false);
   const [emailHelperText, setEmailHelperText] = useState("");
-  const [errorName, setErrorName] = useState(false);
-  const [nameHelperText, setNameHelperText] = useState("");
-  const [errorPassword, setErrorPassword] = useState(false);
-  const [passwordHelperText, setPasswordHelperText] = useState("");
 
   const handleChange = (e) => {
     setEmail(e.target.value);
-  };
-
-  const handleChangePassword = (e) => {
-    setPassword(e.target.value);
-  };
-
-  const handleChangeName = (e) => {
-    setName(e.target.value);
   };
 
   const emailErrorHandler = () => {
@@ -91,26 +75,6 @@ const Login = () => {
     }
   };
 
-  const nameErrorHandler = () => {
-    if (name === "") {
-      setErrorName(true);
-      setNameHelperText("Name is required");
-    } else {
-      setErrorName(false);
-      setNameHelperText("");
-    }
-  };
-
-  const passwordErrorHandler = () => {
-    if (password === "") {
-      setErrorPassword(true);
-      setPasswordHelperText("Password is required");
-    } else {
-      setErrorPassword(false);
-      setPasswordHelperText("");
-    }
-  };
-
   const onButtonClick = () => {
     let regexEmail = /\S+@\S+\.\S+/;
     if (email === "" || !email.match(regexEmail)) {
@@ -121,7 +85,6 @@ const Login = () => {
     Axios.get(`${baseURL}/api/v1/myinfo/authorize?email=${email}`)
       .then((resp) => {
         const url = resp.data.url;
-        console.log(url)
         window.location.replace(url);
       })
       .catch((e) => {
