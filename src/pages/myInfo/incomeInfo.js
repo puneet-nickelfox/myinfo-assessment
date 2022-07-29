@@ -199,10 +199,13 @@ const IncomeInfo = ({ employeeData }) => {
             </div>
           </Grid>
         </Grid>
+        {employeeData?.cpfbalances &&
+        <>
         <Typography variant="h5" className={classes.typoMarginTop}>
           CPF Account Balance
         </Typography>
         <TableContainer>
+         
           <Table className={classes.table} aria-label="simple table">
             <TableHead>
               <TableRow className={classes.cell}>
@@ -260,6 +263,8 @@ const IncomeInfo = ({ employeeData }) => {
             </TableBody>
           </Table>
         </TableContainer>
+        </>
+}
         {employeeData?.cpfcontributions?.history?.length > 0 && (
           <>
             <Typography className={classes.typoMarginTop} variant="h5">

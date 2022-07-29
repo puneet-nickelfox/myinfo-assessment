@@ -1,17 +1,18 @@
 import React, { Component, useEffect } from "react";
 import { useState } from "react";
 import "../auth/login.css";
-import { Button, Grid, makeStyles, Paper, Typography } from "@material-ui/core";
-import InputField from "../../components/InputField";
+import { Button, Grid, makeStyles, Paper, Typography ,Divider} from "@material-ui/core";
 import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
 import ToggleButton from "@material-ui/lab/ToggleButton";
 import ContactInfo from "./contactInfo";
 import IncomeInfo from "./incomeInfo";
 import OtherInfo from "./otherInfo";
 import PersonalInfo from "./personalInfo";
-import { useLocation } from "react-router-dom";
+import { useLocation, useHistory } from "react-router-dom";
 import Axios from "axios";
+
 const baseURL = process.env.REACT_APP_BASE_URL;
+
 const useStyles = makeStyles({
   background: {
     height: "100vh",
@@ -19,17 +20,31 @@ const useStyles = makeStyles({
     background: "black",
   },
   paper: {
-    padding: 30,
+    padding: "0px 30px",
     gridGap: 30,
     height: "100%",
     width: "100%",
     overflowY: "auto",
     overflowX: "auto",
+    display:"flex",
+    justifyContent:"center",
+    background:"rgb(240, 241, 244)",
+    ["@media (max-width:800px)"]: {
+      width: "100%",
+      padding: "0px 0px",
+    },
   },
   toggleDiv: {
+    padding: 30,
     display: "flex",
     flexDirection: "column",
-    width: "50%",
+    width: "70%",
+    height:"auto",
+    background:"white",
+    overflow:"auto",
+    ["@media (max-width:800px)"]: {
+      width: "100%",
+    },
   },
   selected: {
     border: "none !important",
@@ -44,6 +59,10 @@ const useStyles = makeStyles({
 const MyInfo = () => {
   const classes = useStyles();
   const [activeTab, setActiveTab] = useState("CONTACT");
+  const search = useLocation().search;
+  const code = new URLSearchParams(search)?.get("code");
+  const email = new URLSearchParams(search)?.get("state");
+  const history = useHistory();
   const [employeeData, setEmployeeData] = useState({
     dob: "1988-10-06",
     sex: "MALE",
@@ -199,19 +218,20 @@ const MyInfo = () => {
     employmentsector: "",
     residentialstatus: "CITIZEN",
   });
-  const search = useLocation().search;
 
   useEffect(() => {
+    if (!code) {
+      history.push("/login");
+      return;
+    }
     handleAllData();
   }, []);
 
   const handleAllData = () => {
-    const code = new URLSearchParams(search)?.get("code");
-    const email = new URLSearchParams(search)?.get("state");
-
     Axios.get(`${baseURL}/api/v1/myinfo?code=${code}`)
       .then((resp) => {
-        setEmployeeData(resp.data);
+        console.log(resp)
+        setEmployeeData(resp.data.data);
       })
       .catch((e) => {
         console.log(e);
@@ -273,21 +293,9 @@ const MyInfo = () => {
               >
                 Income Info
               </ToggleButton>
-              <ToggleButton
-                classes={{
-                  label: classes.label,
-                  selected: classes.selected,
-                }}
-                // style={{
-                //   background: "#EDECF5",
-                //   color: "#82889C",
-                // }}
-                style={{ border: "none" }}
-                value="OTHER"
-              >
-                Other Info
-              </ToggleButton>
+              
             </ToggleButtonGroup>
+            <Divider/>
             {activeTab === "CONTACT" && (
               <ContactInfo employeeData={employeeData} />
             )}
@@ -297,7 +305,6 @@ const MyInfo = () => {
             {activeTab === "INCOME" && (
               <IncomeInfo employeeData={employeeData} />
             )}
-            {activeTab === "OTHER" && <OtherInfo />}
           </div>
         </Paper>
       </div>
