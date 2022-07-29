@@ -12,11 +12,11 @@ const App = () => {
     <>
       <Router>
         <Switch>
-          <Route path="/info">
-            <MyInfo />
+          <Route path="/login">
+            <Login />
           </Route>
           <Route path="/">
-            <Login />
+            <MyInfo />
           </Route>
         </Switch>
       </Router>

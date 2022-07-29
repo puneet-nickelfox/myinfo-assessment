@@ -56,7 +56,7 @@ const useStyles = makeStyles({
   },
 });
 
-const PersonalInfo = () => {
+const PersonalInfo = ({ employeeData }) => {
   const classes = useStyles();
 
   return (
@@ -68,26 +68,72 @@ const PersonalInfo = () => {
         <Grid container className={classes.grid}>
           <Grid item>
             <div className={classes.fdInfo}>
+              <div className={classes.title}>NRIC/FIN</div>
+              <div className={classes.info}>
+                {employeeData?.uinfin != "" ? employeeData?.uinfin : "N/A"}
+              </div>
+            </div>
+          </Grid>
+          <Grid item>
+            <div className={classes.fdInfo}>
               <div className={classes.title}>Principal Name</div>
-              <div className={classes.info}>Howard Chen YU</div>
+              <div className={classes.info}>
+                {employeeData?.name != "" ? employeeData?.name : "N/A"}
+              </div>
             </div>
           </Grid>
           <Grid item>
             <div className={classes.fdInfo}>
               <div className={classes.title}>Sex</div>
-              <div className={classes.info}>Male</div>
+              <div className={classes.info}>
+                {employeeData?.sex != "" ? employeeData?.sex : "N/A"}
+              </div>
             </div>
           </Grid>
           <Grid item>
             <div className={classes.fdInfo}>
               <div className={classes.title}>Date Of Birth</div>
-              <div className={classes.info}>06 Oct 1998</div>
+              <div className={classes.info}>
+                {employeeData?.dob != "" ? employeeData?.dob : "N/A"}
+              </div>
             </div>
           </Grid>
           <Grid item>
             <div className={classes.fdInfo}>
               <div className={classes.title}>Country Of Birth</div>
-              <div className={classes.info}>Singapore</div>
+              <div className={classes.info}>
+                {employeeData?.birthcountry != ""
+                  ? employeeData?.birthcountry
+                  : "N/A"}
+              </div>
+            </div>
+          </Grid>
+          <Grid item>
+            <div className={classes.fdInfo}>
+              <div className={classes.title}>Residential Status</div>
+              <div className={classes.info}>
+                {employeeData?.residentialstatus != ""
+                  ? employeeData?.residentialstatus
+                  : "N/A"}
+              </div>
+            </div>
+          </Grid>
+          <Grid item>
+            <div className={classes.fdInfo}>
+              <div className={classes.title}>Nationality</div>
+              <div className={classes.info}>
+                {employeeData?.nationality != ""
+                  ? employeeData?.nationality
+                  : "N/A"}
+              </div>
+            </div>
+          </Grid>
+          <Grid item>
+            <div className={classes.fdInfo}>
+              <div className={classes.title}>Race</div>
+              <div className={classes.info}>
+                {employeeData?.race != "" ? employeeData?.race : "N/A"}
+              </div>
             </div>
           </Grid>
         </Grid>

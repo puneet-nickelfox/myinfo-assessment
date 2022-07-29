@@ -49,17 +49,16 @@ const useStyles = makeStyles({
   typoMarginTop: {
     marginTop: 20,
     ["@media (max-width:700px)"]: {
-        fontSize: "1.2em",
-      },
-      ["@media (max-width:550px)"]: {
-          fontSize: "1.1em",
-        },
+      fontSize: "1.2em",
+    },
+    ["@media (max-width:550px)"]: {
+      fontSize: "1.1em",
+    },
   },
 });
 
-const ContactInfo = () => {
+const ContactInfo = ({ employeeData }) => {
   const classes = useStyles();
-
   return (
     <>
       <div className={classes.marginTop}>
@@ -70,17 +69,20 @@ const ContactInfo = () => {
           <Grid item>
             <div className={classes.fdInfo}>
               <div className={classes.title}>Mobile Number</div>
-              <div className={classes.info}>8002012111</div>
+              <div className={classes.info}>
+                {employeeData?.mobileno ?? "N/A"}
+              </div>
             </div>
           </Grid>
           <Grid item>
             <div className={classes.fdInfo}>
               <div className={classes.title}>Email Address</div>
-              <div className={classes.info}>fajba@kaw.com</div>
+              <div className={classes.info}>
+                {employeeData?.email != "" ? employeeData?.email : "N/A"}
+              </div>
             </div>
           </Grid>
         </Grid>
-
         <Typography variant="h5" className={classes.typoMarginTop}>
           Registered Address
         </Typography>
@@ -88,13 +90,57 @@ const ContactInfo = () => {
           <Grid item>
             <div className={classes.fdInfo}>
               <div className={classes.title}>Block Number</div>
-              <div className={classes.info}>B-12</div>
+              <div className={classes.info}>
+                {employeeData?.regadd?.block != ""
+                  ? employeeData?.regadd?.block
+                  : "N/A"}
+              </div>
             </div>
           </Grid>
           <Grid item>
             <div className={classes.fdInfo}>
               <div className={classes.title}>Street Name</div>
-              <div className={classes.info}>New York Street</div>
+              <div className={classes.info}>
+                {employeeData?.regadd?.street != ""
+                  ? employeeData?.regadd?.street
+                  : "N/A"}
+              </div>
+            </div>
+          </Grid>
+          <Grid item>
+            <div className={classes.fdInfo}>
+              <div className={classes.title}>Building Name</div>
+              <div className={classes.info}>
+                {employeeData?.regadd?.building != ""
+                  ? employeeData?.regadd?.building
+                  : "N/A"}
+              </div>
+            </div>
+          </Grid>
+          <Grid item>
+            <div className={classes.fdInfo}>
+              <div className={classes.title}>Floor & Unit No</div>
+              <div className={classes.info}>
+                {`${employeeData?.regadd?.floor} - ${employeeData?.regadd?.unit}`}
+              </div>
+            </div>
+          </Grid>
+          <Grid item>
+            <div className={classes.fdInfo}>
+              <div className={classes.title}>Postal Code</div>
+              <div className={classes.info}>
+                {employeeData?.regadd?.postal != ""
+                  ? employeeData?.regadd?.postal
+                  : "N/A"}
+              </div>
+            </div>
+          </Grid>
+          <Grid item>
+            <div className={classes.fdInfo}>
+              <div className={classes.title}>Type Of Housing</div>
+              <div className={classes.info}>
+                {employeeData?.hdbtype != "" ? employeeData?.hdbtype : "N/A"}
+              </div>
             </div>
           </Grid>
         </Grid>

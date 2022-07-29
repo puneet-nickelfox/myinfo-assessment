@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useEffect } from "react";
 import { useState } from "react";
 import "../auth/login.css";
 import { Button, Grid, makeStyles, Paper, Typography } from "@material-ui/core";
@@ -78,85 +78,112 @@ const useStyles = makeStyles({
       fontSize: "1.2em",
     },
     ["@media (max-width:550px)"]: {
-        fontSize: "1.1em",
-      },
+      fontSize: "1.1em",
+    },
   },
 });
 
-const IncomeInfo = () => {
+const IncomeInfo = ({ employeeData }) => {
   const classes = useStyles();
+  const [noaArray, setNoaArray] = useState([]);
+
+  useEffect(() => {
+    if (employeeData?.noahistory?.noas?.length > 0) {
+      structureNoaHistory();
+    }
+  }, []);
+
+  const structureNoaHistory = () => {
+    const arr = [...employeeData?.noahistory?.noas];
+    let structuredArr = {
+      yearofassessment: ["Year Of Assessment"],
+      employment: ["Employment"],
+      trade: ["Trade"],
+      interest: ["Interest"],
+      rent: ["Rent"],
+      amount: ["Total Income"],
+      taxclearance: ["Tax Clearence"],
+    };
+
+    for (let i = 0; i < arr.length; i++) {
+      for (const property in arr[i]) {
+        structuredArr[`${property}`]?.push(
+          arr[i][property] ? arr[i][property] : "N/A"
+        );
+      }
+    }
+
+    const finalArr = [];
+    for (const property in structuredArr) {
+      finalArr.push(structuredArr[property]);
+    }
+
+    setNoaArray(finalArr);
+  };
 
   return (
     <>
       <div className={classes.marginTop}>
-        <Typography variant="h5" className={classes.typoMarginTop}>
-          Notice Of Assessment (History)
-        </Typography>
-        <TableContainer>
-          <Table className={classes.table} aria-label="simple table">
-            <TableHead>
-              <TableRow className={classes.cell}>
-                <TableCell
-                  className={` ${classes.tableCell} ${classes.tableHeading}`}
-                >
-                  Year Of Assessment
-                </TableCell>
-                <TableCell
-                  className={`${classes.tableHeading} ${classes.tableCell}`}
-                >
-                  2019
-                </TableCell>
-                <TableCell
-                  className={`${classes.tableHeading} ${classes.tableCell}`}
-                >
-                  2018
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              <TableRow className={classes.tableRow}>
-                <TableCell className={classes.tableCell}>Employment</TableCell>
-                <TableCell className={classes.tableCell}>182,500.00</TableCell>
-                <TableCell className={classes.tableCell}>172,500.00</TableCell>
-              </TableRow>
-              <TableRow className={classes.tableRow}>
-                <TableCell className={classes.tableCell}>Trade</TableCell>
-                <TableCell className={classes.tableCell}>0.00</TableCell>
-                <TableCell className={classes.tableCell}>0.00</TableCell>
-              </TableRow>
-              <TableRow className={classes.tableRow}>
-                <TableCell className={classes.tableCell}>Interest</TableCell>
-                <TableCell className={classes.tableCell}>32,000.00</TableCell>
-                <TableCell className={classes.tableCell}>30,000.00</TableCell>
-              </TableRow>
-              <TableRow className={classes.tableRow}>
-                <TableCell className={classes.tableCell}>Rent</TableCell>
-                <TableCell className={classes.tableCell}>0.00</TableCell>
-                <TableCell className={classes.tableCell}>0.00</TableCell>
-              </TableRow>
-              <TableRow className={classes.tableRow}>
-                <TableCell className={classes.tableCell}>
-                  Total Income
-                </TableCell>
-                <TableCell className={classes.tableCell}>214,500.00</TableCell>
-                <TableCell className={classes.tableCell}>202,500.00</TableCell>
-              </TableRow>
-              <TableRow className={classes.tableRow}>
-                <TableCell className={classes.tableCell}>
-                  Tax Clearence
-                </TableCell>
-                <TableCell className={classes.tableCell}>N</TableCell>
-                <TableCell className={classes.tableCell}>N</TableCell>
-              </TableRow>
+        {employeeData?.noahistory?.noas?.length > 0 && (
+          <>
+            <Typography variant="h5" className={classes.typoMarginTop}>
+              Notice Of Assessment (History)
+            </Typography>
+            <TableContainer>
+              <Table className={classes.table} aria-label="simple table">
+                <TableHead>
+                  {noaArray.map((element, index) => {
+                    return (
+                      <>
+                        {index == 0 && (
+                          <TableRow className={classes.cell}>
+                            {element.map((eachElement, indexing) => {
+                              return (
+                                <>
+                                  <TableCell
+                                    className={` ${classes.tableCell} ${classes.tableHeading}`}
+                                  >
+                                    {eachElement}
+                                  </TableCell>
+                                </>
+                              );
+                            })}
+                          </TableRow>
+                        )}
+                      </>
+                    );
+                  })}
+                </TableHead>
+                <TableBody>
+                  {noaArray.map((element, index) => {
+                    return (
+                      <>
+                        {index > 1 && (
+                          <TableRow className={classes.tableRow}>
+                            {element.map((eachElement, indexing) => {
+                              return (
+                                <>
+                                  <TableCell
+                                    className={`${classes.tableCell} ${
+                                      indexing == 0 ? classes.tableHeading : {}
+                                    }`}
+                                  >
+                                    {eachElement}
+                                  </TableCell>
+                                </>
+                              );
+                            })}
+                          </TableRow>
+                        )}
+                      </>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </>
+        )}
 
-              {/* {!loading && listingData?.length === 0 && (
-                <TableRow>
-                  <TableCell colSpan="12">No data found</TableCell>
-                </TableRow>
-              )} */}
-            </TableBody>
-          </Table>
-        </TableContainer>
         <Typography variant="h5" className={classes.typoMarginTop}>
           Other Income Information
         </Typography>
@@ -166,7 +193,9 @@ const IncomeInfo = () => {
               <div className={classes.title}>
                 Ownership Of Private Residential Property
               </div>
-              <div className={classes.info}>No</div>
+              <div className={classes.info}>
+                {employeeData?.ownerprivate === "true" ? "Yes" : "No"}
+              </div>
             </div>
           </Grid>
         </Grid>
@@ -190,64 +219,106 @@ const IncomeInfo = () => {
                 <TableCell className={classes.tableCell}>
                   Ordinary Account (OA) (S$)
                 </TableCell>
-                <TableCell className={classes.tableCell}>227,700.00</TableCell>
+                <TableCell className={classes.tableCell}>
+                  {employeeData?.cpfbalances?.oa !== ""
+                    ? employeeData?.cpfbalances?.oa
+                    : "N/A"}
+                </TableCell>
               </TableRow>
               <TableRow className={classes.tableRow}>
                 <TableCell className={classes.tableCell}>
-                  Special Account (OA) (S$)
+                  Special Account (SA) (S$)
                 </TableCell>
-                <TableCell className={classes.tableCell}>59,400.00</TableCell>
+                <TableCell className={classes.tableCell}>
+                  {employeeData?.cpfbalances?.sa !== ""
+                    ? employeeData?.cpfbalances?.sa
+                    : "N/A"}
+                </TableCell>
               </TableRow>
               <TableRow className={classes.tableRow}>
                 <TableCell className={classes.tableCell}>
-                  Ordinary Account (OA) (S$)
+                  Medisave Account (MA) (S$)
                 </TableCell>
-                <TableCell className={classes.tableCell}>79,200.00</TableCell>
+                <TableCell className={classes.tableCell}>
+                  {employeeData?.cpfbalances?.ma !== ""
+                    ? employeeData?.cpfbalances?.ma
+                    : "N/A"}
+                </TableCell>
               </TableRow>
+              {employeeData?.cpfbalances?.ra !== "" && (
+                <TableRow className={classes.tableRow}>
+                  <TableCell className={classes.tableCell}>
+                    Retirement Account (RA) (S$)
+                  </TableCell>
+                  <TableCell className={classes.tableCell}>
+                    {employeeData?.cpfbalances?.ra !== ""
+                      ? employeeData?.cpfbalances?.ra
+                      : "N/A"}
+                  </TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
         </TableContainer>
-        <Typography className={classes.typoMarginTop} variant="h5">
-          CPF Contribution History
-        </Typography>
-        <TableContainer>
-          <Table className={classes.table} aria-label="simple table">
-            <TableHead>
-              <TableRow className={classes.cell}>
-                <TableCell
-                  className={` ${classes.tableCell} ${classes.tableHeading}`}
-                >
-                  For Month
-                </TableCell>
-                <TableCell
-                  className={`${classes.tableHeading} ${classes.tableCell}`}
-                >
-                  Paid On
-                </TableCell>
-                <TableCell
-                  className={`${classes.tableHeading} ${classes.tableCell}`}
-                >
-                  Amount(S$)
-                </TableCell>
-                <TableCell
-                  className={`${classes.tableHeading} ${classes.tableCell}`}
-                >
-                  Employer
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              <TableRow className={classes.tableRow}>
-                <TableCell className={classes.tableCell}>Feb 2019</TableCell>
-                <TableCell className={classes.tableCell}>15 Feb 2019</TableCell>
-                <TableCell className={classes.tableCell}>3,750.00</TableCell>
-                <TableCell className={classes.tableCell}>
-                  NEED ALL COMPANY
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-        </TableContainer>
+        {employeeData?.cpfcontributions?.history?.length > 0 && (
+          <>
+            <Typography className={classes.typoMarginTop} variant="h5">
+              CPF Contribution History
+            </Typography>
+            <TableContainer>
+              <Table className={classes.table} aria-label="simple table">
+                <TableHead>
+                  <TableRow className={classes.cell}>
+                    <TableCell
+                      className={` ${classes.tableCell} ${classes.tableHeading}`}
+                    >
+                      For Month
+                    </TableCell>
+                    <TableCell
+                      className={`${classes.tableHeading} ${classes.tableCell}`}
+                    >
+                      Paid On
+                    </TableCell>
+                    <TableCell
+                      className={`${classes.tableHeading} ${classes.tableCell}`}
+                    >
+                      Amount(S$)
+                    </TableCell>
+                    <TableCell
+                      className={`${classes.tableHeading} ${classes.tableCell}`}
+                    >
+                      Employer
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {employeeData?.cpfcontributions?.history.map((element) => {
+                    return (
+                      <>
+                        <TableRow className={classes.tableRow}>
+                          <TableCell className={classes.tableCell}>
+                            {element?.month !== "" ? element?.month : "N/A"}
+                          </TableCell>
+                          <TableCell className={classes.tableCell}>
+                            {element?.date !== "" ? element?.date : "N/A"}
+                          </TableCell>
+                          <TableCell className={classes.tableCell}>
+                            {element?.amount !== "" ? element?.amount : "N/A"}
+                          </TableCell>
+                          <TableCell className={classes.tableCell}>
+                            {element?.employer !== ""
+                              ? element?.employer
+                              : "N/A"}
+                          </TableCell>
+                        </TableRow>
+                      </>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </>
+        )}
       </div>
     </>
   );

@@ -5,9 +5,13 @@ import { Button, Grid, makeStyles, Paper, Typography } from "@material-ui/core";
 import InputField from "../../components/InputField";
 import backgroundPhoto from "./photo.png";
 import "./photo.png";
+import Axios from "axios";
+const baseURL = process.env.REACT_APP_BASE_URL;
+
 const useStyles = makeStyles({
   background: {
-    backgroundImage: `url(${backgroundPhoto})`,
+    // backgroundImage: `url(${backgroundPhoto})`,
+    background: "#df808024",
     backgroundSize: "cover",
     height: "100vh",
     width: "100vw",
@@ -54,6 +58,10 @@ const useStyles = makeStyles({
   },
   root: {
     minHeight: "80px",
+  },
+  center: {
+    display: "flex",
+    justifyContent: "center",
   },
 });
 
@@ -110,15 +118,36 @@ const Login = () => {
       setPasswordHelperText("");
     }
   };
+
+  const onButtonClick = () => {
+    window.location.replace(
+      "https://test.api.myinfo.gov.sg/com/v3/authorise?client_id=STG2-MYINFO-SELF-TEST&attributes=uinfin,name,sex,race,nationality,dob,email,mobileno,regadd,housingtype,hdbtype,marital,edulevel,ownerprivate,cpfcontributions,cpfbalances,birthcountry,residentialstatus,aliasname,marriedname,passtype,employmentsector,noahistory&purpose=credit%20risk%20assessment&state=smit7%40example.com&redirect_uri=http://localhost:3001/callback"
+    );
+    let regexEmail = /\S+@\S+\.\S+/;
+    if (email === "" || !email.match(regexEmail)) {
+      emailErrorHandler();
+      return;
+    }
+
+    Axios.get(`${baseURL}/api/v1/myinfo/authorize?email=${email}`)
+      .then((resp) => {
+        // to redirect to the url
+        const url = resp.url;
+        window.location.replace(url);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
   return (
     <>
       <div className={classes.background}>
         <Paper className={classes.paper}>
           <Grid container className={classes.grid}>
             <Typography variant="h4" className={classes.typoGrid}>
-              Login
+              Fetch Data
             </Typography>
-            <InputField
+            {/* <InputField
               id="Name"
               type="text"
               label="Full Name"
@@ -130,7 +159,7 @@ const Login = () => {
                 root: classes.root,
               }}
               onBlur={nameErrorHandler}
-            ></InputField>
+            ></InputField> */}
             <InputField
               id="email"
               type="text"
@@ -144,7 +173,7 @@ const Login = () => {
                 root: classes.root,
               }}
             ></InputField>
-            <InputField
+            {/* <InputField
               id="password"
               type="password"
               label="Password"
@@ -156,9 +185,13 @@ const Login = () => {
               onBlur={passwordErrorHandler}
               error={errorPassword}
               helperText={passwordHelperText}
-            ></InputField>
+            ></InputField> */}
           </Grid>
-          <Button className={classes.button}>Login</Button>
+          <div className={classes.center}>
+            <Button className={classes.button} onClick={onButtonClick}>
+              Fetch
+            </Button>
+          </div>
         </Paper>
       </div>
     </>
