@@ -38,7 +38,7 @@ const useStyles = makeStyles({
     fontSize: "16px",
     fontWeight: 500,
     color: "#050d33",
-    fontFamily: "Manrope",
+    fontFamily: "Manrope,  sans-serif",
   },
   typoMarginTop: {
     marginTop: 20,
